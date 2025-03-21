@@ -73,4 +73,9 @@ public class TransactionController {
         var transactions = service.findAllByUser(user.getUsername());
         return ResponseEntity.ok(transactions);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Transaction> update(@PathVariable String id, @RequestBody Transaction transaction, @AuthenticationPrincipal UserDetails user) {
+        var updatedTransaction = service.updateTransaction(id, transaction, user.getUsername());
+        return ResponseEntity.ok(updatedTransaction);
+    }
 }

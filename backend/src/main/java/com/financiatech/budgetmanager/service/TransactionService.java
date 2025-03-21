@@ -14,6 +14,20 @@ public class TransactionService {
         this.repository = repository;
     }
 
+    public Transaction updateTransaction(String id, Transaction transaction, String userEmail) {
+        // Vérifie si la transaction appartient à l'utilisateur
+        var existingTransaction = repository.findByIdAndUserId(id, userEmail)
+                .orElseThrow(() -> new RuntimeException("Transaction introuvable ou non autorisée"));
+
+        // Mise à jour des champs
+        existingTransaction.setLabel(transaction.getLabel());
+        existingTransaction.setAmount(transaction.getAmount());
+        existingTransaction.setCategory(transaction.getCategory());
+        existingTransaction.setDate(transaction.getDate());
+
+        return repository.save(existingTransaction);
+    }
+
     public void deleteByIdIfOwned(String id, String userEmail) {
         var tx = repository.findByIdAndUserId(id, userEmail)
                 .orElseThrow(() -> new RuntimeException("Transaction introuvable ou non autorisée"));

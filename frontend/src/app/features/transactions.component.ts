@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
-type Transaction = {
-  id: string;
-  userId: string;
-  date: string;
-  label: string;
-  amount: number;
-  category?: string;
-};
+export type Transaction = {
+    id: string;
+    userId: string;
+    date: string;
+    label: string;
+    amount: number;
+    category?: string;
+  };
+  
 
 @Component({
   standalone: true,
@@ -39,6 +41,10 @@ type Transaction = {
           <td>
             <button (click)="deleteTransaction(tx.id)">🗑️</button>
           </td>
+          <td>
+  <button (click)="editTransaction(tx.id)">Modifier</button>
+</td>
+
         </tr>
       </tbody>
     </table>
@@ -51,7 +57,7 @@ type Transaction = {
 export class TransactionsComponent implements OnInit {
   transactions: Transaction[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.loadTransactions();
@@ -74,4 +80,9 @@ export class TransactionsComponent implements OnInit {
       error: () => alert('Erreur lors de la suppression'),
     });
   }
+
+  editTransaction(id: string) {
+    this.router.navigate([`/transactions/edit/${id}`]);
+  }
+
 }
