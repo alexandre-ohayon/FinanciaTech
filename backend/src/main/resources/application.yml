@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/budget-manager
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: budget-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
