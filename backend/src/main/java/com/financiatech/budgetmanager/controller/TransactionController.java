@@ -1,6 +1,7 @@
 package com.financiatech.budgetmanager.controller;
 
 import com.financiatech.budgetmanager.kafka.producer.TransactionProducer;
+import com.financiatech.budgetmanager.service.TransactionService;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -10,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.financiatech.budgetmanager.model.Transaction;
+
 
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -20,9 +23,11 @@ import java.util.*;
 @RequestMapping("/transactions")
 public class TransactionController {
     private final TransactionProducer producer;
+    private final TransactionService service;
 
-    public TransactionController(TransactionProducer producer) {
+    public TransactionController(TransactionProducer producer, TransactionService service) {
         this.producer = producer;
+        this.service = service;
     }
 
     @PostMapping("/import")
@@ -55,5 +60,17 @@ public class TransactionController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id, @AuthenticationPrincipal UserDetails user) {
+        service.deleteByIdIfOwned(id, user.getUsername());
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Transaction>> getAll(@AuthenticationPrincipal UserDetails user) {
+        var transactions = service.findAllByUser(user.getUsername());
+        return ResponseEntity.ok(transactions);
     }
 }
