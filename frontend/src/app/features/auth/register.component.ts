@@ -5,10 +5,10 @@ import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  standalone: true,
-  selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  template: `
+    selector: 'app-register',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, RouterModule],
+    template: `
     <h2>Inscription</h2>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <label>Email</label>
@@ -22,7 +22,7 @@ import { HttpClient } from '@angular/common/http';
       <button type="submit" [disabled]="form.invalid">Créer un compte</button>
     </form>
     <a routerLink="/login">Déjà inscrit ? Se connecter</a>
-  `,
+  `
 })
 export class RegisterComponent {
   form = this.fb.group({

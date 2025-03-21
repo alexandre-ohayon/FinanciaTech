@@ -18,16 +18,16 @@ export type Transaction = {
   };  
 
 @Component({
-  standalone: true,
-  selector: 'app-transactions',
-  imports: [CommonModule,
-    FormsModule,
-    MatButtonModule,
-    MatTableModule,
-    MatFormFieldModule,
-    MatInputModule,
-    CommonModule
-],
+    selector: 'app-transactions',
+    standalone: true,
+    imports: [CommonModule,
+        FormsModule,
+        MatButtonModule,
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule,
+        CommonModule
+    ],
     template: `
     <h2>Transactions</h2>
 
@@ -87,7 +87,7 @@ export type Transaction = {
 
   <button mat-raised-button color="primary" type="submit">Ajouter</button>
 </form>
-  `,
+  `
 })
 export class TransactionsComponent implements OnInit {
   transactions: Transaction[] = [];

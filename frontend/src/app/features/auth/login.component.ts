@@ -5,10 +5,10 @@ import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  standalone: true,
-  selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  template: `
+    selector: 'app-login',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, RouterModule],
+    template: `
     <h2>Connexion</h2>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <label>Email</label>
@@ -24,7 +24,7 @@ import { HttpClient } from '@angular/common/http';
     
     <a routerLink="/forgot-password">Mot de passe oublié ?</a>
     <a routerLink="/register">Créer un compte</a>
-  `,
+  `
 })
 export class LoginComponent {
   form = this.fb.group({

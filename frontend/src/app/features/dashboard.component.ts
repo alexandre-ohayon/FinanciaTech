@@ -14,17 +14,18 @@ import { MatListModule } from '@angular/material/list';  // Pour la barre de nav
 import { MatSidenavModule } from '@angular/material/sidenav';  // Pour la barre de navigation
 
 @Component({
-  standalone: true,
-  selector: 'app-dashboard',
-  imports: [
-    CommonModule, 
-    NgxChartsModule, RouterModule, FormsModule, MatButtonModule, MatSidenavModule,
-    MatListModule,
-    MatToolbarModule, 
-    MatTableModule,
-    MatFormFieldModule,
-    MatInputModule],
-  template: `
+    selector: 'app-dashboard',
+    standalone: true,
+    imports: [
+        CommonModule,
+        NgxChartsModule, RouterModule, FormsModule, MatButtonModule, MatSidenavModule,
+        MatListModule,
+        MatToolbarModule,
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule
+    ],
+    template: `
     <mat-sidenav-container class="sidenav-container">
       <mat-sidenav #sidenav mode="side" opened>
         <mat-nav-list>
@@ -91,7 +92,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';  // Pour la barre 
         </div>
       </mat-sidenav-content>
     </mat-sidenav-container>
-  `,
+  `
 })
 export class DashboardComponent implements OnInit {
   barChartData: { name: string; value: number }[] = [];

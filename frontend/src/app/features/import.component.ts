@@ -6,10 +6,10 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  standalone: true,
-  selector: 'app-import',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
-  template: `
+    selector: 'app-import',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, FormsModule],
+    template: `
     <h2>Importer un fichier CSV</h2>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -21,7 +21,7 @@ import { FormsModule } from '@angular/forms';
 
     <p *ngIf="success" style="color: green;">Import réussi !</p>
     <p *ngIf="error" style="color: red;">Erreur lors de l’import.</p>
-  `,
+  `
 })
 export class ImportComponent {
   form: FormGroup<{ file: FormControl<File | null> }> = this.fb.group({

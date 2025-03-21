@@ -7,10 +7,10 @@ import { Transaction } from './transactions.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  standalone: true,
-  selector: 'app-edit-transaction',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
-  template: `
+    selector: 'app-edit-transaction',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, FormsModule],
+    template: `
     <h2>Modifier une transaction</h2>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -28,7 +28,7 @@ import { FormsModule } from '@angular/forms';
 
       <button type="submit" [disabled]="form.invalid">Modifier</button>
     </form>
-  `,
+  `
 })
 export class EditTransactionComponent implements OnInit {
   form: FormGroup;

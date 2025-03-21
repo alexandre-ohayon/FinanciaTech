@@ -5,10 +5,10 @@ import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  standalone: true,
-  selector: 'app-forgot-password',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  template: `
+    selector: 'app-forgot-password',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, RouterModule],
+    template: `
     <h2>Mot de passe oublié</h2>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <label>Email</label>
@@ -18,7 +18,7 @@ import { HttpClient } from '@angular/common/http';
       <button type="submit" [disabled]="form.invalid">Envoyer le lien</button>
     </form>
     <a routerLink="/login">Retour à la connexion</a>
-  `,
+  `
 })
 export class ForgotPasswordComponent {
   form = this.fb.group({

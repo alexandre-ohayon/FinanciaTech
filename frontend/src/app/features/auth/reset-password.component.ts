@@ -5,10 +5,10 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  standalone: true,
-  selector: 'app-reset-password',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  template: `
+    selector: 'app-reset-password',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, RouterModule],
+    template: `
     <h2>Réinitialiser le mot de passe</h2>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <label>Nouveau mot de passe</label>
@@ -17,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 
       <button type="submit" [disabled]="form.invalid">Réinitialiser</button>
     </form>
-  `,
+  `
 })
 export class ResetPasswordComponent {
   token = this.route.snapshot.queryParamMap.get('token') || '';
