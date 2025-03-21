@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+/* Assurez-vous que le sidenav prend toute la hauteur de la page */
+mat-sidenav {
+    width: 250px;  /* Ajuste la largeur du sidenav */
+  }
+  
+  mat-sidenav-container {
+    height: 100vh; /* Prend toute la hauteur de l'écran */
+    display: flex; /* Flexbox pour aligner les éléments */
+  }
+  
+  mat-sidenav-content {
+    flex: 1; /* Le contenu prend tout l'espace restant */
+  }
+  
+  /* Réinitialisation des marges et des paddings pour tout le corps de la page */
+  body, html {
+    margin: 0;
+    padding: 0;
+  }
+  

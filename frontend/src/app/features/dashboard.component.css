@@ -1,0 +1,12 @@
+mat-sidenav {
+    width: 250px;  /* Ajuste la largeur du sidenav selon tes besoins */
+  }
+  
+  mat-sidenav-container {
+    height: 100vh; /* Assure-toi que le container prend toute la hauteur de l'écran */
+    display: flex; /* Flexbox pour aligner les éléments */
+  }
+  
+  mat-sidenav-content {
+    flex: 1; /* Le contenu prend tout l'espace restant */
+  }

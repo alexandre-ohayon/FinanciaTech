@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-import { RouterModule, Router } from '@angular/router';
+import { Router } from '@angular/router'; // Ensure Router is imported
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button'; // Import material button
+import { MatTableModule } from '@angular/material/table'; // Import material table
+import { MatFormFieldModule } from '@angular/material/form-field'; // Import form fields
+import { MatInputModule } from '@angular/material/input'; // Import input fields
 
 export type Transaction = {
     id: string;
@@ -16,53 +20,71 @@ export type Transaction = {
 @Component({
   standalone: true,
   selector: 'app-transactions',
-  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule],
-  template: `
+  imports: [CommonModule,
+    HttpClientModule,
+    FormsModule,
+    MatButtonModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule],
+    template: `
     <h2>Transactions</h2>
 
-    <table *ngIf="transactions.length > 0">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Libellé</th>
-          <th>Montant</th>
-          <th>Catégorie</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tx of transactions">
-          <td>{{ tx.date }}</td>
-          <td>{{ tx.label }}</td>
-          <td [style.color]="tx.amount < 0 ? 'red' : 'green'">{{ tx.amount | currency:'EUR' }}</td>
-          <td>{{ tx.category || '-' }}</td>
-          <td>
-            <button (click)="editTransaction(tx)">Modifier</button>
-            <button (click)="deleteTransaction(tx.id)">Supprimer</button>
-          </td>
-        </tr>
-      </tbody>
+    <table mat-table [dataSource]="transactions">
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+        <mat-cell *matCellDef="let transaction">{{ transaction.date }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="label">
+        <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
+        <mat-cell *matCellDef="let transaction">{{ transaction.label }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+        <mat-cell *matCellDef="let transaction">{{ transaction.amount | currency }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+        <mat-cell *matCellDef="let transaction">{{ transaction.category || '-' }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+        <mat-cell *matCellDef="let transaction">
+          <button mat-button color="accent" (click)="editTransaction(transaction)">Edit</button>
+          <button mat-button color="warn" (click)="deleteTransaction(transaction.id)">Delete</button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </table>
 
-    <div *ngIf="transactions.length === 0">
-      <p>Aucune transaction trouvée.</p>
-    </div>
-
-    <h2>Ajouter une transaction</h2>
     <form (submit)="addTransaction()">
-      <label for="label">Libellé</label>
-      <input type="text" id="label" [(ngModel)]="newTransaction.label" name="label" required />
+      <mat-form-field appearance="fill">
+        <mat-label>Label</mat-label>
+        <input matInput type="text" [(ngModel)]="newTransaction.label" name="label" required />
+      </mat-form-field>
 
-      <label for="amount">Montant</label>
-      <input type="number" id="amount" [(ngModel)]="newTransaction.amount" name="amount" required />
+      <mat-form-field appearance="fill">
+        <mat-label>Amount</mat-label>
+        <input matInput type="number" [(ngModel)]="newTransaction.amount" name="amount" required />
+      </mat-form-field>
 
-      <label for="category">Catégorie</label>
-      <input type="text" id="category" [(ngModel)]="newTransaction.category" name="category" />
+      <mat-form-field appearance="fill">
+        <mat-label>Category</mat-label>
+        <input matInput type="text" [(ngModel)]="newTransaction.category" name="category" />
+      </mat-form-field>
 
-      <label for="date">Date</label>
-      <input type="date" id="date" [(ngModel)]="newTransaction.date" name="date" required />
+      <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input matInput type="date" [(ngModel)]="newTransaction.date" name="date" required />
+      </mat-form-field>
 
-      <button type="submit">Ajouter</button>
+      <button mat-raised-button color="primary" type="submit">Add</button>
     </form>
   `,
 })
@@ -76,6 +98,7 @@ export class TransactionsComponent implements OnInit {
     category: '',
     date: '' 
   };
+  displayedColumns: string[] = ['date', 'label', 'amount', 'category', 'actions']; 
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
@@ -86,7 +109,7 @@ export class TransactionsComponent implements OnInit {
       next: (data) => {
         this.transactions = data;
       },
-      error: () => alert('Erreur lors du chargement des transactions'),
+      error: () => alert('Error loading transactions'),
     });
   }
 
@@ -99,12 +122,12 @@ export class TransactionsComponent implements OnInit {
         this.transactions.push(tx);
         this.newTransaction = { id: '', userId: '', label: '', amount: 0, category: '', date: '' };
       },
-      error: () => alert('Erreur lors de l\'ajout de la transaction'),
+      error: () => alert('Error adding transaction'),
     });
   }
 
   deleteTransaction(id: string) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette transaction ?')) {
+    if (confirm('Are you sure you want to delete this transaction?')) {
       const token = localStorage.getItem('token');
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
@@ -112,7 +135,7 @@ export class TransactionsComponent implements OnInit {
         next: () => {
           this.transactions = this.transactions.filter(tx => tx.id !== id);
         },
-        error: () => alert('Erreur lors de la suppression de la transaction'),
+        error: () => alert('Error deleting transaction'),
       });
     }
   }
