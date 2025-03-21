@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { RouterModule } from '@angular/router';
 import { Transaction } from './transactions.component';
@@ -16,7 +16,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';  // Pour la barre 
 @Component({
   standalone: true,
   selector: 'app-dashboard',
-  imports: [CommonModule, HttpClientModule, NgxChartsModule, RouterModule, FormsModule, MatButtonModule, MatSidenavModule,
+  imports: [
+    CommonModule, 
+    NgxChartsModule, RouterModule, FormsModule, MatButtonModule, MatSidenavModule,
     MatListModule,
     MatToolbarModule, 
     MatTableModule,

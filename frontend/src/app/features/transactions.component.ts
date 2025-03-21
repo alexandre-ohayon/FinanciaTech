@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router'; // Ensure Router is imported
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button'; // Import material button
@@ -21,12 +21,13 @@ export type Transaction = {
   standalone: true,
   selector: 'app-transactions',
   imports: [CommonModule,
-    HttpClientModule,
     FormsModule,
     MatButtonModule,
     MatTableModule,
     MatFormFieldModule,
-    MatInputModule],
+    MatInputModule,
+    CommonModule
+],
     template: `
     <h2>Transactions</h2>
 
