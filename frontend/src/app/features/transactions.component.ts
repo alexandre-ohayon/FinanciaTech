@@ -64,28 +64,28 @@ export type Transaction = {
     </table>
 
     <form (submit)="addTransaction()">
-      <mat-form-field appearance="fill">
-        <mat-label>Label</mat-label>
-        <input matInput type="text" [(ngModel)]="newTransaction.label" name="label" required />
-      </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Date</mat-label>
+    <input matInput type="date" [(ngModel)]="newTransaction.date" name="date" required />
+  </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Amount</mat-label>
-        <input matInput type="number" [(ngModel)]="newTransaction.amount" name="amount" required />
-      </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Libellé</mat-label>
+    <input matInput type="text" [(ngModel)]="newTransaction.label" name="label" required />
+  </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Category</mat-label>
-        <input matInput type="text" [(ngModel)]="newTransaction.category" name="category" />
-      </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Montant</mat-label>
+    <input matInput type="number" [(ngModel)]="newTransaction.amount" name="amount" required />
+  </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Date</mat-label>
-        <input matInput type="date" [(ngModel)]="newTransaction.date" name="date" required />
-      </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Catégorie</mat-label>
+    <input matInput type="text" [(ngModel)]="newTransaction.category" name="category" />
+  </mat-form-field>
 
-      <button mat-raised-button color="primary" type="submit">Add</button>
-    </form>
+  <button mat-raised-button color="primary" type="submit">Ajouter</button>
+</form>
   `,
 })
 export class TransactionsComponent implements OnInit {
@@ -100,7 +100,7 @@ export class TransactionsComponent implements OnInit {
   };
   displayedColumns: string[] = ['date', 'label', 'amount', 'category', 'actions']; 
   constructor(private http: HttpClient, private router: Router) {}
-
+  
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -116,15 +116,19 @@ export class TransactionsComponent implements OnInit {
   addTransaction() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
+  
     this.http.post<Transaction>('http://localhost:8080/transactions', this.newTransaction, { headers }).subscribe({
       next: (tx) => {
         this.transactions.push(tx);
         this.newTransaction = { id: '', userId: '', label: '', amount: 0, category: '', date: '' };
       },
-      error: () => alert('Error adding transaction'),
+      error: (err) => {
+        console.error('Error adding transaction', err);
+        alert('Erreur lors de l\'ajout de la transaction');
+      },
     });
   }
+  
 
   deleteTransaction(id: string) {
     if (confirm('Are you sure you want to delete this transaction?')) {

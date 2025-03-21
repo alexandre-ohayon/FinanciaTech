@@ -53,6 +53,30 @@ import { MatSidenavModule } from '@angular/material/sidenav';  // Pour la barre 
           <button mat-raised-button color="primary" type="submit">Apply Filters</button>
         </form>
 
+        <!-- Graphique des revenus vs dépenses -->
+        <div *ngIf="revenueData.length > 0 && expenseData.length > 0">
+          <ngx-charts-bar-vertical
+            [results]="revenueExpenseData"
+            [xAxis]="true"
+            [yAxis]="true"
+            [legend]="true"
+            [showDataLabel]="true"
+            [roundEdges]="true">
+          </ngx-charts-bar-vertical>
+        </div>
+
+        <!-- Graphique mensuel -->
+        <div *ngIf="monthlyChartData.length > 0">
+          <ngx-charts-line-chart
+            [results]="monthlyChartData"
+            [xAxis]="true"
+            [yAxis]="true"
+            [legend]="true"
+            >
+          </ngx-charts-line-chart>
+        </div>
+
+        <!-- Graphique des catégories -->
         <div *ngIf="barChartData.length > 0">
           <ngx-charts-bar-vertical
             [results]="barChartData"
@@ -63,21 +87,23 @@ import { MatSidenavModule } from '@angular/material/sidenav';  // Pour la barre 
             [roundEdges]="true">
           </ngx-charts-bar-vertical>
         </div>
-        <div *ngIf="barChartData.length === 0">
-          <p>No transactions found.</p>
-        </div>
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,
 })
 export class DashboardComponent implements OnInit {
   barChartData: { name: string; value: number }[] = [];
+  monthlyChartData: { name: string; series: { name: string; value: number }[] }[] = [];
+  revenueData: { name: string; value: number }[] = [];
+  expenseData: { name: string; value: number }[] = [];
+
+  revenueExpenseData: { name: string; value: number }[] = [];
+
   transactions: Transaction[] = [];
   startDate: string = '';
   endDate: string = '';
   categoryFilter: string = '';
-  displayedColumns: string[] = ['date', 'label', 'amount', 'category', 'actions']; 
-
+  
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -88,6 +114,8 @@ export class DashboardComponent implements OnInit {
       next: (data) => {
         this.transactions = data;
         this.prepareChartData();
+        this.prepareRevenueExpenseData();
+        this.prepareMonthlyChartData();
       },
       error: () => alert('Error loading transactions'),
     });
@@ -95,6 +123,25 @@ export class DashboardComponent implements OnInit {
 
   applyFilters() {
     this.prepareChartData();
+    this.prepareRevenueExpenseData();
+    this.prepareMonthlyChartData();
+  }
+
+  prepareMonthlyChartData() {
+    const monthlyData = this.transactions.reduce((acc, tx) => {
+      const month = new Date(tx.date).toLocaleString('default', { month: 'long' });
+      acc[month] = (acc[month] || 0) + tx.amount;
+      return acc;
+    }, {} as Record<string, number>);
+  
+    this.monthlyChartData = Object.keys(monthlyData).map((month) => ({
+      name: month,
+      series: [
+        { name: month, value: monthlyData[month] },
+      ],
+    }));
+  
+    console.log('Monthly Chart Data:', this.monthlyChartData);  // Ajoute ce log
   }
 
   prepareChartData() {
@@ -119,4 +166,20 @@ export class DashboardComponent implements OnInit {
       value: categoryData[category],
     }));
   }
+
+  prepareRevenueExpenseData() {
+    const revenue = this.transactions.filter(tx => tx.amount > 0);
+    const expense = this.transactions.filter(tx => tx.amount < 0);
+  
+    const totalRevenue = revenue.reduce((acc, tx) => acc + tx.amount, 0);
+    const totalExpense = expense.reduce((acc, tx) => acc + tx.amount, 0);
+  
+    this.revenueExpenseData = [
+      { name: 'Revenus', value: totalRevenue },
+      { name: 'Dépenses', value: totalExpense }
+    ];
+  
+    console.log('Revenue vs Expense Data:', this.revenueExpenseData);  // Ajoute ce log
+  }
+  
 }
