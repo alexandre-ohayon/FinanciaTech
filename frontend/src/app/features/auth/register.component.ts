@@ -34,13 +34,16 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.form.invalid) return;
-
+  
     this.http.post<{ token: string }>('http://localhost:8080/auth/register', this.form.value).subscribe({
       next: res => {
         localStorage.setItem('token', res.token);
         this.router.navigateByUrl('/dashboard');
       },
-      error: () => alert('Erreur lors de l’inscription'),
+      error: err => {
+        const msg = err.error?.message || 'Erreur lors de l’inscription';
+        alert(msg);
+      }
     });
   }
 }

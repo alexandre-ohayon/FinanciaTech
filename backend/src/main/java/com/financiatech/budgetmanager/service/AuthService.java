@@ -9,10 +9,12 @@ import com.financiatech.budgetmanager.repository.PasswordResetTokenRepository;
 import com.financiatech.budgetmanager.repository.UserRepository;
 import com.financiatech.budgetmanager.security.JwtService;
 import com.financiatech.budgetmanager.service.email.MailService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.UUID;
